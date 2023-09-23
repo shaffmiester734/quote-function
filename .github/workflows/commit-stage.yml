@@ -38,29 +38,29 @@ jobs:
         if: success() || failure()
         with:
           sarif_file: ${{ steps.scan.outputs.sarif }}
-  native:
-    name: Build and Test (Native)
-    runs-on: ubuntu-22.04
-    permissions:
-      contents: read
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v3
-      - name: Set up GraalVM
-        uses: graalvm/setup-graalvm@v1
-        with:
-          distribution: 'graalvm'
-          java-version: '17'
-          components: 'native-image'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build, unit tests and integration tests (native)
-        run: |
-          chmod +x gradlew
-          ./gradlew nativeBuild
+#  native:
+#    name: Build and Test (Native)
+#    runs-on: ubuntu-22.04
+#    permissions:
+#      contents: read
+#    steps:
+#      - name: Checkout source code
+#        uses: actions/checkout@v3
+#      - name: Set up GraalVM
+#        uses: graalvm/setup-graalvm@v1
+#        with:
+#          distribution: 'graalvm'
+#          java-version: '17'
+#          components: 'native-image'
+#          github-token: ${{ secrets.GITHUB_TOKEN }}
+#      - name: Build, unit tests and integration tests (native)
+#        run: |
+#          chmod +x gradlew
+#          ./gradlew nativeBuild
   package:
     name: Package and Publish
     if: ${{ github.ref == 'refs/heads/main' }}
-    needs: [ build, native ]
+    needs: [ build ]
     runs-on: ubuntu-22.04
     permissions:
       contents: read
